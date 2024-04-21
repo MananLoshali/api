@@ -15,18 +15,30 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           default: 1,
         },
+        amount: {
+          type: Number,
+          required: true,
+        },
+        color: {
+          type: String,
+        },
+        size: {
+          type: String,
+        },
       },
     ],
-    amount: {
+    totalAmount: {
       type: Number,
       required: true,
     },
     address: {
-      type: Object,
+      type: String,
       required: true,
+      default: "Test Address",
     },
     status: {
       type: String,
+      enum: ["pending", "onway", "delivered", "cancelled"],
       default: "pending",
     },
   },

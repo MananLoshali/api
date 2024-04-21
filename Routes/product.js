@@ -1,6 +1,10 @@
 const router = require("express").Router();
 const Product = require("../Models/Product");
-const { verifyTokenAndAdmin, verifyToken } = require("./verifyToken");
+const {
+  verifyTokenAndAdmin,
+  verifyToken,
+  verifyTokenAndAuthorization,
+} = require("./verifyToken");
 
 //CREATE PRODUCT
 router.post("/addproduct", verifyTokenAndAdmin, async (req, res) => {
@@ -32,6 +36,19 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
+// router.get("/:id", async (req, res) => {
+//   const productId = req.params.id;
+//   try {
+//     const product = await Product.findById( productId );
+//     res.status(200).json(product);
+//     console.log(product);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ msg: "Internal server array", error: error, success: false });
+//   }
+// });
+
 //DELETE PRODUCT
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
@@ -42,11 +59,11 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//GET A PRODUCT
-router.get("/:id", verifyToken, async (req, res) => {
+//GET a product with user login
+router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
-    res.status(200).json(product);
+    const products = await Product.findById(req.params.id);
+    res.status(200).json(products);
   } catch (error) {
     res.status(500).json("Can't get product :: " + error);
   }

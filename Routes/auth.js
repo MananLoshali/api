@@ -71,6 +71,7 @@ router.post("/register", async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: hashedPassword,
+    image: req.body.img,
   });
   try {
     const saveduser = await newUser.save();
@@ -89,7 +90,7 @@ router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      res.send("User not found");
+      res.status(400).json({ msg: "User not found", success: false });
       return;
     } else {
       const isMatch = await bcrypt.compare(req.body.password, user.password);
@@ -103,11 +104,11 @@ router.post("/login", async (req, res) => {
 
         res.status(200).json({ ...others, accessToken });
       } else {
-        res.status(500).json("Wrong password");
+        res.status(400).json({ msg: "Wrong password", success: false });
       }
     }
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ msg: error });
   }
 });
 
